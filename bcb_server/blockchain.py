@@ -1,6 +1,6 @@
 from hashlib import sha256
 
-from block import Block
+from bcb_server.block import Block
 import time
 
 class Blockchain:

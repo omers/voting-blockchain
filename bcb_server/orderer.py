@@ -1,8 +1,8 @@
-from block import Block
-from blockchain import Blockchain
+from bcb_server.block import Block
+from bcb_server.blockchain import Blockchain
 
 from flask import Flask, request, jsonify
-from utils import get_ip
+from bcb_server.utils import get_ip
 
 import json
 import requests
@@ -137,15 +137,15 @@ def get_node():
     }
     return jsonify(result)
 
-if __name__ == '__main__':
-    from argparse import ArgumentParser
+# if __name__ == '__main__':
+#     from argparse import ArgumentParser
 
-    parser = ArgumentParser()
-    parser.add_argument('-p', '--port', default=5002, type=int, help='port to listen on')
-    args = parser.parse_args()
-    port = args.port
+#     parser = ArgumentParser()
+#     parser.add_argument('-p', '--port', default=5002, type=int, help='port to listen on')
+#     args = parser.parse_args()
+#     port = args.port
 
-    print('My ip address : ' + get_ip())
+#     print('My ip address : ' + get_ip())
 
-    app.run(host='0.0.0.0', port=port, debug = True, threaded = True)
+#     app.run(host='0.0.0.0', port=port, debug = True, threaded = True)
 

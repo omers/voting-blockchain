@@ -1,6 +1,6 @@
-from block import Block
-from blockchain import Blockchain
-from utils import get_ip
+from bcb_server.block import Block
+from bcb_server.blockchain import Blockchain
+from bcb_server.utils import get_ip
 
 from flask import Flask, request, jsonify
 
