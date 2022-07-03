@@ -332,7 +332,7 @@ def join_to_network(orderer, ca, myIP, myPort):
         
         return False
 
-if __name__ == '__main__':
+""" if __name__ == '__main__':
     from argparse import ArgumentParser
 
     myIP = get_ip()
@@ -354,5 +354,5 @@ if __name__ == '__main__':
         print("Let me sleep for 5 seconds")
         time.sleep(5)
 
-    app.run(host='0.0.0.0', port=port, debug = True, threaded = True)
+    app.run(host='0.0.0.0', port=port, debug = True, threaded = True) """
 
