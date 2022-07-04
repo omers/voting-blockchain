@@ -1,7 +1,7 @@
 from bcb_server.peer import app
 from bcb_server.peer import join_to_network
-from bcb_server.utils import get_ip
 from bcb_server.peer import ordererIP, ordererPort, caIP, caPort
+from bcb_server.utils import get_ip
 import time
 
 if __name__ == '__main__':

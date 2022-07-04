@@ -7,3 +7,5 @@
 5. Setup dockerfiles
 6. Add tests
 7. Add Monitoring
+8. Node decomission
+9. Add validator for orderer add_node to validate input of ip address and port

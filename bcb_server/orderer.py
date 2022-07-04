@@ -2,7 +2,7 @@ from bcb_server.block import Block
 from bcb_server.blockchain import Blockchain
 
 from flask import Flask, request, jsonify
-from bcb_server.utils import get_ip
+from bcb_server.utils import get_ip, validate_port
 
 import json
 import requests
@@ -22,10 +22,11 @@ def register_new_peers():
     if not data:
         return "Invalid data", 400
 
-    request_addr = data["ipaddress"]
     try:
+        request_addr = data["ipaddress"]
         ipaddress.ip_address(request_addr)
         port = data["port"]
+        port = validate_port(port)
     except:
         return "Invalid Host Address", 400
 

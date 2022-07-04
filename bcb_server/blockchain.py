@@ -3,17 +3,22 @@ from hashlib import sha256
 from bcb_server.block import Block
 import time
 
+
 class Blockchain:
     # difficulty of our PoW algorithm
     difficulty = 2
 
     def __init__(self):
         self.unconfirmed_transactions = []
-        self.chain = []    
+        self.chain = []
         # for validate transaction and return to user. like account in ethereum
         self.open_surveys = {}
         # for smart contract
-        self.chain_code = {'chain': self.chain, 'open_surveys': self.open_surveys, 'unconfirmed_transactions': self.unconfirmed_transactions}
+        self.chain_code = {
+            "chain": self.chain,
+            "open_surveys": self.open_surveys,
+            "unconfirmed_transactions": self.unconfirmed_transactions,
+        }
         self.create_genesis_block()
 
     @staticmethod
@@ -21,7 +26,7 @@ class Blockchain:
         blockchain = Blockchain()
         blockchain.unconfirmed_transactions = []
         blockchain.chain = []
-        
+
         for block in chain:
             blockchain.chain.append(Block.fromDict(block))
 
@@ -34,7 +39,7 @@ class Blockchain:
         a valid hash.
         """
         genesis_block = Block(0, [], time.time(), "0")
-        #proof of work to init
+        # proof of work to init
         self.proof_of_work(genesis_block)
 
         genesis_block.hash = genesis_block.compute_hash()
@@ -73,7 +78,7 @@ class Blockchain:
         block.nonce = 0
 
         computed_hash = block.compute_hash()
-        while not computed_hash.startswith('0' * Blockchain.difficulty):
+        while not computed_hash.startswith("0" * Blockchain.difficulty):
             block.nonce += 1
             computed_hash = block.compute_hash()
 
@@ -89,8 +94,10 @@ class Blockchain:
         the difficulty criteria.
         """
 
-        return (block_hash.startswith('0' * Blockchain.difficulty) and
-                block_hash == block.compute_hash())
+        return (
+            block_hash.startswith("0" * Blockchain.difficulty)
+            and block_hash == block.compute_hash()
+        )
 
     @classmethod
     def check_chain_validity(cls, chain):
@@ -103,8 +110,10 @@ class Blockchain:
             # using `compute_hash` method.
             delattr(block, "hash")
 
-            if not cls.is_valid_proof(block, block_hash) or \
-                    previous_hash != block.previous_hash:
+            if (
+                not cls.is_valid_proof(block, block_hash)
+                or previous_hash != block.previous_hash
+            ):
                 result = False
                 break
 
