@@ -1,3 +1,4 @@
+from crypt import methods
 from bcb_server.block import Block
 from bcb_server.blockchain import Blockchain
 
@@ -9,10 +10,18 @@ import requests
 import ipaddress
 
 app = Flask(__name__)
+app.config.update(
+    TESTING = False,
+    SECRET_KEY = "8aec3962c9afd88179b7e8edf282f130389170ef5e703f1cbb0ae8214a094ca9"
+)
 
 
 # the address to other participating members of the network
 peers = set()
+
+@app.route("/health", methods=["GET"])
+def health():
+    return jsonify({"status": "ok"}), 200
 
 # endpoint to add new peers to the network.
 @app.route("/add_node", methods=["POST"])
