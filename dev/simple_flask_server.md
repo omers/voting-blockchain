@@ -1,3 +1,6 @@
+# Flask Blockchain implementation
+
+## Description
 *Blockchain* is a time-stamped decentralized series of fixed records that contains data of any size is controlled by a large network of computers that are scattered around the globe and not owned by a single organization. Every block is secured and connected with each other using hashing technology which protects it from being tampered by an unauthorized person. 
 
 *Creating Blockchain using Python, mining new blocks, and displaying the whole blockchain:*
@@ -10,7 +13,7 @@
 * After mining several blocks the validity of the chain must be checked in order to prevent any kind of tampering with the blockchain.
 * Then the web app will be made by using Flask and deployed locally or publicly as per the need of the user.
 
-
+## API
 ### Output (mine_block):
 ```json
 {
