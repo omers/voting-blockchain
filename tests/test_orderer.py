@@ -3,11 +3,22 @@ import pytest
 import json
 
 
-@pytest.fixture()
+@pytest.fixture(scope="session")
 def client():
     app.config.update({"TESTING": True})
     return app.test_client()
 
+def test_health_check_endpoint(client):
+    response = client.get("/health")
+    assert 200
+    assert response.json == {"status": "ok"}
+
+def test_add_node_endpoint_accept_only_post(client):
+    response = client.open(
+        "/add_node", method="OPTIONS"
+    )
+    assert sorted(response.allow) == ["OPTIONS", "POST"]
+    assert response.data == b""
 
 def test_add_node_endpoint(client):
     data = {"ipaddress": "192.68.1.1", "port": 5000}
