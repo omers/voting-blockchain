@@ -2,7 +2,7 @@
 
 # For timestamp
 import datetime
-
+import time
 # Calculating the hash
 # in order to add digital
 # fingerprints to the blocks
@@ -15,7 +15,9 @@ import json
 # Flask is for creating the web
 # app and jsonify is for
 # displaying the blockchain
-from flask import Flask, jsonify
+from flask import Flask, jsonify, Response
+from prometheus_client import Counter, generate_latest, Summary
+CONTENT_TYPE_LATEST = str('text/plain; version=0.0.4; charset=utf-8')
 
 
 class Blockchain:
@@ -89,23 +91,40 @@ class Blockchain:
 # App using flask
 app = Flask(__name__)
 
+# Setup App exposed metrics
+
 # Create the object
 # of the class blockchain
 blockchain = Blockchain()
 
+index_counter = Counter('index', 'Index Page Counter')
+@app.route('/', methods=['GET'])
+def index():
+	index_counter.inc()
+	return jsonify({"status": "OK"}), 200
+
+@app.route('/metrics')
+def metrics():
+	return Response(generate_latest(), mimetype=CONTENT_TYPE_LATEST)
+
 # Mining a new block
-
-
+mine_block_counter = Counter('mine_block', 'Mine Block Counter')
+mine_duration = Summary('mine_block_duration_compute_seconds', 'Time spent in the mine_block() function')
 @app.route('/mine_block', methods=['GET'])
+@mine_duration.time()
 def mine_block():
+	st = time.time()
+	mine_block_counter.inc()
 	previous_block = blockchain.print_previous_block()
 	previous_proof = previous_block['proof']
 	proof = blockchain.proof_of_work(previous_proof)
 	previous_hash = blockchain.hash(previous_block)
 	block = blockchain.create_block(proof, previous_hash)
-
+	et = time.time()
+	elapsed_time = et - st
 	response = {'message': 'A block is MINED',
 				'index': block['index'],
+				'elapsed': elapsed_time,
 				'timestamp': block['timestamp'],
 				'proof': block['proof'],
 				'previous_hash': block['previous_hash']}
@@ -114,18 +133,22 @@ def mine_block():
 
 # Display blockchain in json format
 
-
+get_chain_counter = Counter('get_chain', 'Get Chain URL Counter')
 @app.route('/get_chain', methods=['GET'])
-def display_chain():
+def get_chain():
+	get_chain_counter.inc()
 	response = {'chain': blockchain.chain,
 				'length': len(blockchain.chain)}
 	return jsonify(response), 200
 
 # Check validity of blockchain
 
-
+valid_block_counter = Counter('valid', 'Mine Block Counter')
+valid_duration = Summary('valid_duration_compute_seconds', 'Time spent in the valid() function')
 @app.route('/valid', methods=['GET'])
+@valid_duration.time()
 def valid():
+	valid_block_counter.inc()
 	valid = blockchain.chain_valid(blockchain.chain)
 
 	if valid:
@@ -136,5 +159,5 @@ def valid():
 
 
 # Run the flask server locally
-app.run(host='127.0.0.1', port=5000)
+app.run(host='0.0.0.0', port=5001)
 
